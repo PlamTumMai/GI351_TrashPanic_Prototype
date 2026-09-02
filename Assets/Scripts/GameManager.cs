@@ -20,10 +20,9 @@ public class GameManager : MonoBehaviour
     void CheckTrash()
     {
         float timing = catchZone.GetTiming();
-
+    // ไม่มีขยะใน CatchZone = ไม่ทำอะไร
         if (timing < 0)
         {
-            Debug.Log("MISS!");
             return;
         }
 
@@ -31,21 +30,30 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("PERFECT!");
             AddScore(100);
+
+            Destroy(catchZone.currentTrash.gameObject);
+            catchZone.currentTrash = null;
         }
         else if (timing <= 0.4f)
         {
             Debug.Log("GOOD!");
             AddScore(50);
-        }
-        else
-        {
-            Debug.Log("MISS!");
-            AddOverload();
-            return;
-        }
 
-        Destroy(catchZone.currentTrash.gameObject);
-        catchZone.currentTrash = null;
+            Destroy(catchZone.currentTrash.gameObject);
+            catchZone.currentTrash = null;
+        }
+    }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+        Debug.Log("Score: " + score);
+    }
+
+    public void AddMiss()
+    {
+        Debug.Log("MISS!");
+        AddOverload();
     }
 
     void AddOverload()
@@ -58,17 +66,11 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-    }   
+    } 
 
     void GameOver()
     {
         Debug.Log("GAME OVER!");
         Time.timeScale = 0;
-    }
-
-    public void AddScore(int amount)
-    {
-        score += amount;
-        Debug.Log("Score: " + score);
     }
 }
